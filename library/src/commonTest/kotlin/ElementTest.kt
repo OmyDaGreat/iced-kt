@@ -35,8 +35,43 @@ class ElementTest {
 
     @Test
     fun `test button element creation`() {
-        val button = Button("Click me")
+        val button = Button("Click me", onClick = {})
         assertEquals("Click me", button.label)
         assertNull(button.key)
+    }
+
+    @Test
+    fun `test row element creation`() {
+        val row =
+            Row(
+                children =
+                    listOf(
+                        Text("Item 1"),
+                        Text("Item 2"),
+                    ),
+            )
+        assertEquals(2, row.children.size)
+        assertNull(row.key)
+    }
+
+    @Test
+    fun `test textfield element creation`() {
+        val textField = TextField("Hello", onValueChange = {})
+        assertEquals("Hello", textField.value)
+        assertNull(textField.key)
+    }
+
+    @Test
+    fun `test checkbox element creation`() {
+        val checkbox = Checkbox(checked = true, onCheckedChange = {})
+        assertEquals(true, checkbox.checked)
+        assertNull(checkbox.key)
+    }
+
+    @Test
+    fun `test spacer element creation`() {
+        val spacer = Spacer(size = 16)
+        assertEquals(16, spacer.size)
+        assertNull(spacer.key)
     }
 }

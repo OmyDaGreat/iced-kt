@@ -14,11 +14,13 @@ val desc: String by project
 val inception: String by project
 
 plugins {
-    alias(libs.plugins.kotlinMultiplatform)
+    kotlin("multiplatform")
+    kotlin("plugin.compose")
+    alias(libs.plugins.dokka)
+    alias(libs.plugins.compose)
+    alias(libs.plugins.kotlinter)
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.vanniktech.mavenPublish)
-    alias(libs.plugins.dokka)
-    alias(libs.plugins.kotlinter)
 }
 
 group = g
@@ -68,6 +70,9 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(libs.kermit)
+                implementation(compose.runtime)
+                implementation(compose.foundation)
+                implementation(compose.ui)
             }
         }
         val commonTest by getting {

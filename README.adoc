@@ -174,6 +174,109 @@ The `IcedRuntime` handles the entire update cycle:
 5. Runtime calls `view(newModel)` to get the new UI description
 6. Compose automatically re-renders the changed parts of the UI
 
+=== Complete Example: Todo List Application
+
+Here's a more complete example showing multiple component types and message handling:
+
+[source,kotlin]
+----
+import xyz.malefic.compose.iced.*
+import androidx.compose.ui.window.Window
+import androidx.compose.ui.window.application
+
+// Model
+data class TodoModel(
+    val todos: List<String> = emptyList(),
+    val input: String = "",
+    val showCompleted: Boolean = true
+)
+
+// Messages
+sealed class TodoMessage {
+    data class UpdateInput(val text: String) : TodoMessage()
+    object AddTodo : TodoMessage()
+    data class RemoveTodo(val index: Int) : TodoMessage()
+    data class ToggleShowCompleted(val show: Boolean) : TodoMessage()
+}
+
+// Application
+class TodoApp : Application<TodoModel, TodoMessage> {
+    override fun init() = TodoModel()
+
+    override fun update(model: TodoModel, message: TodoMessage): TodoModel =
+        when (message) {
+            is TodoMessage.UpdateInput -> 
+                model.copy(input = message.text)
+            
+            is TodoMessage.AddTodo ->
+                if (model.input.isNotBlank()) {
+                    model.copy(
+                        todos = model.todos + model.input,
+                        input = ""
+                    )
+                } else model
+            
+            is TodoMessage.RemoveTodo ->
+                model.copy(
+                    todos = model.todos.filterIndexed { i, _ -> i != message.index }
+                )
+            
+            is TodoMessage.ToggleShowCompleted ->
+                model.copy(showCompleted = message.show)
+        }
+
+    override fun view(model: TodoModel, dispatch: (TodoMessage) -> Unit): Element =
+        Card(
+            children = listOf(
+                Text("Todo List Application"),
+                Spacer(size = 16),
+                
+                // Input section
+                Row(
+                    children = listOf(
+                        TextField(
+                            value = model.input,
+                            onValueChange = { dispatch(TodoMessage.UpdateInput(it)) },
+                            placeholder = "Enter a new todo"
+                        ),
+                        Button("Add", onClick = { dispatch(TodoMessage.AddTodo) })
+                    )
+                ),
+                
+                // Settings
+                Switch(
+                    checked = model.showCompleted,
+                    onCheckedChange = { dispatch(TodoMessage.ToggleShowCompleted(it)) },
+                    label = "Show completed items"
+                ),
+                
+                Spacer(size = 8),
+                Text("${model.todos.size} items"),
+                
+                // Todo list
+                Column(
+                    children = model.todos.mapIndexed { index, todo ->
+                        Row(
+                            children = listOf(
+                                Text(todo),
+                                Button("Remove", onClick = { 
+                                    dispatch(TodoMessage.RemoveTodo(index)) 
+                                })
+                            )
+                        )
+                    }
+                )
+            )
+        )
+}
+
+fun main() = application {
+    Window(onCloseRequest = ::exitApplication, title = "Todo App") {
+        TodoApp().runIced()
+    }
+}
+----
+
 === Building
 
 To build the library for all platforms:

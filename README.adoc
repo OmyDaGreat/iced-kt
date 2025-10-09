@@ -1,14 +1,19 @@
-= Kotlin Multiplatform Library Template
+= iced-kt: A Multiplatform GUI Library
 :toc: left
 :toclevels: 3
 :source-highlighter: highlightjs
 :icons: font
 
-A comprehensive template for creating Kotlin Multiplatform libraries with publishing to Maven Central.
+A Kotlin Multiplatform GUI library following the Elm Architecture, inspired by https://github.com/iced-rs/iced[iced-rs] and built on top of Jetpack Compose.
 
 == Overview
 
-This template provides everything you need to build and publish a Kotlin Multiplatform library to Maven Central. It includes support for multiple platforms and comes pre-configured with modern development tools.
+iced-kt is a cross-platform GUI library that brings the Elm Architecture pattern to Kotlin Multiplatform. It provides a simple, predictable way to build interactive applications with a focus on:
+
+* *Pure Functions*: Application logic is expressed through pure functions, making it easy to test and reason about
+* *Immutability*: State changes are explicit and predictable
+* *Type Safety*: Leverage Kotlin's type system for compile-time guarantees
+* *Cross-Platform*: Write your application logic once and deploy to JVM, Android, iOS, and Web platforms
 
 == Supported Platforms
 
@@ -23,17 +28,40 @@ This template supports the following platforms:
 |Web |JavaScript & WebAssembly applications
 |===
 
+== The Elm Architecture
+
+iced-kt follows the Elm Architecture pattern, which consists of three core concepts:
+
+=== Model
+The state of your application. This should be a simple data structure that represents everything your UI needs to display.
+
+=== Message
+Events that can occur in your application (user clicks, network responses, etc.). Messages drive state changes.
+
+=== Update
+A pure function that takes the current model and a message, and returns a new model. This is where your application logic lives.
+
+=== View
+A function that takes the current model and returns a description of what should be displayed. The view is automatically updated when the model changes.
+
 == Features
 
-=== Kotlin Multiplatform
-Full Kotlin Multiplatform setup with support for a variety of  targets.
+=== Elm Architecture Implementation
+Complete implementation of the Elm Architecture pattern for Kotlin Multiplatform:
 
-=== Publishing to Maven Central
-Pre-configured publishing setup using the vanniktech Maven publish plugin with support for:
+* Pure functional state management
+* Type-safe message handling
+* Declarative UI descriptions
+* Commands for side effects
+* Subscriptions for external events
 
-* Automatic signing with GPG keys
-* Publishing to Sonatype Central Portal
-* GitHub Actions integration for automated releases
+=== Multiplatform Support
+Full Kotlin Multiplatform setup with support for:
+
+* JVM (Desktop applications with Compose Desktop)
+* Android (Native Android apps)
+* iOS (Native iOS apps)
+* Web (JavaScript and WebAssembly)
 
 === Development Tools
 
@@ -45,14 +73,6 @@ Pre-configured publishing setup using the vanniktech Maven publish plugin with s
 |Kermit |Latest |Multiplatform logging library
 |===
 
-=== Project Configuration
-Centralized configuration using gradle.properties for easy customization:
-
-* Developer information
-* Repository details
-* Publishing coordinates
-* Library metadata
-
 == Getting Started
 
 === Prerequisites
@@ -61,16 +81,54 @@ Centralized configuration using gradle.properties for easy customization:
 * Gradle 8.0 or higher
 * Xcode (for iOS development, macOS only)
 
-=== Setup
+=== Installation
 
-1. Clone this template repository
-2. Update the `gradle.properties` file with your information:
-   * Change `user`, `dev`, `mail`, `devURL` to your details
-   * Update `repo`, `g`, `artifact`, `desc` for your library
-   * Set the initial version `v`
+Add iced-kt to your project dependencies:
 
-3. Rename the library module if desired
-4. Start developing your library in the `library/src` directory
+[source,kotlin]
+----
+dependencies {
+    implementation("xyz.malefic.compose:iced:1.0.0")
+}
+----
+
+=== Quick Start
+
+Here's a simple counter application to get you started:
+
+[source,kotlin]
+----
+import xyz.malefic.compose.iced.*
+
+// Define your model
+data class Counter(val value: Int = 0)
+
+// Define your messages
+sealed class CounterMessage {
+    object Increment : CounterMessage()
+    object Decrement : CounterMessage()
+}
+
+// Create your application
+class CounterApp : Application<Counter, CounterMessage> {
+    override fun init(): Counter = Counter()
+
+    override fun update(model: Counter, message: CounterMessage): Counter =
+        when (message) {
+            is CounterMessage.Increment -> model.copy(value = model.value + 1)
+            is CounterMessage.Decrement -> model.copy(value = model.value - 1)
+        }
+
+    override fun view(model: Counter): Element =
+        Column(
+            children = listOf(
+                Text("Count: ${model.value}"),
+                Button("Increment"),
+                Button("Decrement")
+            )
+        )
+}
+----
 
 === Building
 
@@ -215,33 +273,60 @@ inception=2025
 v=1.0.0
 ----
 
-== Example Usage
+== Core Concepts
 
-The template includes a simple Fibonacci sequence generator as an example. Replace this with your own library code:
+=== Application Interface
+
+The `Application` interface is the heart of iced-kt:
 
 [source,kotlin]
 ----
-// Common code
-fun generateFibi() =
-    sequence {
-        var a = firstElement
-        yield(a)
-        var b = secondElement
-        yield(b)
-        while (true) {
-            val c = a + b
-            yield(c)
-            a = b
-            b = c
-        }
-    }
+interface Application<Model, Message> {
+    fun init(): Model
+    fun update(model: Model, message: Message): Model
+    fun view(model: Model): Any
+}
+----
 
-expect val firstElement: Int
-expect val secondElement: Int
+=== Commands
 
-// Platform-specific implementations
-actual val firstElement = 3
-actual val secondElement = 4
+Commands handle side effects like HTTP requests or timers:
+
+[source,kotlin]
+----
+interface Command<Message> {
+    suspend fun execute(callback: (Message) -> Unit)
+}
+----
+
+=== Subscriptions
+
+Subscriptions listen to external events:
+
+[source,kotlin]
+----
+interface Subscription<Message> {
+    suspend fun subscribe(callback: (Message) -> Unit): () -> Unit
+}
+----
+
+=== Elements
+
+UI elements provide platform-agnostic descriptions of your interface:
+
+[source,kotlin]
+----
+// Text element
+Text(content = "Hello, World!")
+
+// Container with children
+Column(
+    children = listOf(
+        Text("Item 1"),
+        Text("Item 2"),
+        Button(label = "Click me")
+    )
+)
 ----
 
 == License
@@ -256,9 +341,30 @@ This template is licensed under the MIT License. Update the LICENSE file with yo
 4. Add tests for new functionality
 5. Submit a pull request
 
+== Architecture Benefits
+
+=== Predictability
+Since `update` is a pure function, the same model and message always produce the same result. This makes testing trivial and debugging much easier.
+
+=== Testability
+Pure functions are easy to test. You don't need to mock anything or set up complex test environments:
+
+[source,kotlin]
+----
+@Test
+fun testIncrement() {
+    val model = Counter(value = 5)
+    val newModel = update(model, CounterMessage.Increment)
+    assertEquals(6, newModel.value)
+}
+----
+
+=== Maintainability
+The strict separation between model, update, and view logic makes it clear where each piece of functionality belongs.
+
 == Resources
 
+* https://github.com/iced-rs/iced[iced-rs] - The Rust GUI library that inspired this project
+* https://guide.elm-lang.org/architecture/[The Elm Architecture] - The architectural pattern this library follows
 * https://kotlinlang.org/docs/multiplatform.html[Kotlin Multiplatform Documentation]
-* https://central.sonatype.org/[Maven Central Portal]
-* https://vanniktech.github.io/gradle-maven-publish-plugin/[Vanniktech Maven Publish Plugin]
-* https://github.com/touchlab/Kermit[Kermit Logging Library]
+* https://www.jetbrains.com/lp/compose-multiplatform/[Compose Multiplatform] - The UI framework iced-kt builds upon

@@ -1,7 +1,33 @@
 $dokka.format:html-v1
 $dokka.linkExtension:html
 $dokka.location:xyz.malefic.compose.iced////PointingToDeclaration/library/xyz.malefic.compose.iced/index.html
-$dokka.location:xyz.malefic.compose.iced//firstElement/#/PointingToDeclaration/library/xyz.malefic.compose.iced/first-element.html
-$dokka.location:xyz.malefic.compose.iced//generateFibi/#/PointingToDeclaration/library/xyz.malefic.compose.iced/generate-fibi.html
-$dokka.location:xyz.malefic.compose.iced//secondElement/#/PointingToDeclaration/library/xyz.malefic.compose.iced/second-element.html
+$dokka.location:xyz.malefic.compose.iced//batch/#kotlin.Array[xyz.malefic.compose.iced.Command[TypeParam(bounds=[kotlin.Any?])]]/PointingToDeclaration/library/xyz.malefic.compose.iced/batch.html
+$dokka.location:xyz.malefic.compose.iced/Application///PointingToDeclaration/library/xyz.malefic.compose.iced/-application/index.html
+$dokka.location:xyz.malefic.compose.iced/Application/init/#/PointingToDeclaration/library/xyz.malefic.compose.iced/-application/init.html
+$dokka.location:xyz.malefic.compose.iced/Application/update/#TypeParam(bounds=[kotlin.Any?])#TypeParam(bounds=[kotlin.Any?])/PointingToDeclaration/library/xyz.malefic.compose.iced/-application/update.html
+$dokka.location:xyz.malefic.compose.iced/Application/view/#TypeParam(bounds=[kotlin.Any?])/PointingToDeclaration/library/xyz.malefic.compose.iced/-application/view.html
+$dokka.location:xyz.malefic.compose.iced/Button///PointingToDeclaration/library/xyz.malefic.compose.iced/-button/index.html
+$dokka.location:xyz.malefic.compose.iced/Button/Button/#kotlin.String#kotlin.String?/PointingToDeclaration/library/xyz.malefic.compose.iced/-button/-button.html
+$dokka.location:xyz.malefic.compose.iced/Button/key/#/PointingToDeclaration/library/xyz.malefic.compose.iced/-button/key.html
+$dokka.location:xyz.malefic.compose.iced/Button/label/#/PointingToDeclaration/library/xyz.malefic.compose.iced/-button/label.html
+$dokka.location:xyz.malefic.compose.iced/Column///PointingToDeclaration/library/xyz.malefic.compose.iced/-column/index.html
+$dokka.location:xyz.malefic.compose.iced/Column/Column/#kotlin.collections.List[xyz.malefic.compose.iced.Element]#kotlin.String?/PointingToDeclaration/library/xyz.malefic.compose.iced/-column/-column.html
+$dokka.location:xyz.malefic.compose.iced/Column/children/#/PointingToDeclaration/library/xyz.malefic.compose.iced/-column/children.html
+$dokka.location:xyz.malefic.compose.iced/Column/key/#/PointingToDeclaration/library/xyz.malefic.compose.iced/-column/key.html
+$dokka.location:xyz.malefic.compose.iced/Command///PointingToDeclaration/library/xyz.malefic.compose.iced/-command/index.html
+$dokka.location:xyz.malefic.compose.iced/Command/execute/#kotlin.Function1[TypeParam(bounds=[kotlin.Any?]),kotlin.Unit]/PointingToDeclaration/library/xyz.malefic.compose.iced/-command/execute.html
+$dokka.location:xyz.malefic.compose.iced/Element///PointingToDeclaration/library/xyz.malefic.compose.iced/-element/index.html
+$dokka.location:xyz.malefic.compose.iced/Element/key/#/PointingToDeclaration/library/xyz.malefic.compose.iced/-element/key.html
+$dokka.location:xyz.malefic.compose.iced/NoneCommand///PointingToDeclaration/library/xyz.malefic.compose.iced/-none-command/index.html
+$dokka.location:xyz.malefic.compose.iced/NoneCommand/NoneCommand/#/PointingToDeclaration/library/xyz.malefic.compose.iced/-none-command/-none-command.html
+$dokka.location:xyz.malefic.compose.iced/NoneCommand/execute/#kotlin.Function1[TypeParam(bounds=[kotlin.Any?]),kotlin.Unit]/PointingToDeclaration/library/xyz.malefic.compose.iced/-none-command/execute.html
+$dokka.location:xyz.malefic.compose.iced/NoneSubscription///PointingToDeclaration/library/xyz.malefic.compose.iced/-none-subscription/index.html
+$dokka.location:xyz.malefic.compose.iced/NoneSubscription/NoneSubscription/#/PointingToDeclaration/library/xyz.malefic.compose.iced/-none-subscription/-none-subscription.html
+$dokka.location:xyz.malefic.compose.iced/NoneSubscription/subscribe/#kotlin.Function1[TypeParam(bounds=[kotlin.Any?]),kotlin.Unit]/PointingToDeclaration/library/xyz.malefic.compose.iced/-none-subscription/subscribe.html
+$dokka.location:xyz.malefic.compose.iced/Subscription///PointingToDeclaration/library/xyz.malefic.compose.iced/-subscription/index.html
+$dokka.location:xyz.malefic.compose.iced/Subscription/subscribe/#kotlin.Function1[TypeParam(bounds=[kotlin.Any?]),kotlin.Unit]/PointingToDeclaration/library/xyz.malefic.compose.iced/-subscription/subscribe.html
+$dokka.location:xyz.malefic.compose.iced/Text///PointingToDeclaration/library/xyz.malefic.compose.iced/-text/index.html
+$dokka.location:xyz.malefic.compose.iced/Text/Text/#kotlin.String#kotlin.String?/PointingToDeclaration/library/xyz.malefic.compose.iced/-text/-text.html
+$dokka.location:xyz.malefic.compose.iced/Text/content/#/PointingToDeclaration/library/xyz.malefic.compose.iced/-text/content.html
+$dokka.location:xyz.malefic.compose.iced/Text/key/#/PointingToDeclaration/library/xyz.malefic.compose.iced/-text/key.html
 xyz.malefic.compose.iced

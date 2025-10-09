@@ -99,6 +99,8 @@ Here's a simple counter application to get you started:
 [source,kotlin]
 ----
 import xyz.malefic.compose.iced.*
+import androidx.compose.ui.window.Window
+import androidx.compose.ui.window.application
 
 // Define your model
 data class Counter(val value: Int = 0)
@@ -119,16 +121,58 @@ class CounterApp : Application<Counter, CounterMessage> {
             is CounterMessage.Decrement -> model.copy(value = model.value - 1)
         }
 
-    override fun view(model: Counter): Element =
+    override fun view(model: Counter, dispatch: (CounterMessage) -> Unit): Element =
         Column(
             children = listOf(
                 Text("Count: ${model.value}"),
-                Button("Increment"),
-                Button("Decrement")
+                Button("Increment", onClick = { dispatch(CounterMessage.Increment) }),
+                Button("Decrement", onClick = { dispatch(CounterMessage.Decrement) })
             )
         )
 }
+
+// Run the application with Jetpack Compose
+fun main() = application {
+    Window(onCloseRequest = ::exitApplication, title = "Counter App") {
+        CounterApp().runIced()
+    }
+}
 ----
+
+NOTE: The `runIced()` extension function creates an `IcedRuntime` that manages the application state and automatically handles message dispatching. When users interact with UI elements (clicking buttons, typing in text fields, etc.), the runtime calls the `update` function with the appropriate message and re-renders the view with the new model.
+
+=== Message Dispatching Pattern
+
+The `view` method receives a `dispatch` function that you use to send messages when UI events occur:
+
+[source,kotlin]
+----
+override fun view(model: Counter, dispatch: (CounterMessage) -> Unit): Element =
+    Column(
+        children = listOf(
+            Text("Count: ${model.value}"),
+            // Use the dispatch function in callbacks to send messages
+            Button("Increment", onClick = { 
+                dispatch(CounterMessage.Increment)
+            }),
+            TextField(
+                value = model.input,
+                onValueChange = { newText ->
+                    dispatch(CounterMessage.UpdateInput(newText))
+                }
+            )
+        )
+    )
+----
+
+The `IcedRuntime` handles the entire update cycle:
+
+1. User interacts with a UI element (e.g., clicks a button)
+2. The element's callback is invoked
+3. The callback dispatches a message to the runtime
+4. Runtime calls `update(currentModel, message)` to get the new model
+5. Runtime calls `view(newModel)` to get the new UI description
+6. Compose automatically re-renders the changed parts of the UI
 
 === Building
 
@@ -284,7 +328,7 @@ The `Application` interface is the heart of iced-kt:
 interface Application<Model, Message> {
     fun init(): Model
     fun update(model: Model, message: Message): Model
-    fun view(model: Model): Any
+    fun view(model: Model, dispatch: (Message) -> Unit): Element
 }
 ----
 
@@ -312,21 +356,79 @@ interface Subscription<Message> {
 
 === Elements
 
-UI elements provide platform-agnostic descriptions of your interface:
+iced-kt provides a rich set of UI elements built on top of Jetpack Compose Material3:
 
 [source,kotlin]
 ----
 // Text element
 Text(content = "Hello, World!")
 
-// Container with children
+// Vertical container with children
 Column(
     children = listOf(
         Text("Item 1"),
         Text("Item 2"),
-        Button(label = "Click me")
+        Button("Click me", onClick = { /* onClick handler */ })
     )
 )
+
+// Horizontal container with children
+Row(
+    children = listOf(
+        Text("Left"),
+        Spacer(size = 16),
+        Text("Right")
+    )
+)
+
+// Text input field
+TextField(
+    value = text,
+    onValueChange = { newText -> /* update model */ },
+    placeholder = "Enter text here"
+)
+
+// Checkbox with label
+Checkbox(
+    checked = isChecked,
+    onCheckedChange = { checked -> /* update model */ },
+    label = "Accept terms"
+)
+
+// Switch/Toggle with label
+Switch(
+    checked = isEnabled,
+    onCheckedChange = { enabled -> /* update model */ },
+    label = "Enable feature"
+)
+
+// Card container with elevation
+Card(
+    children = listOf(
+        Text("Card Title"),
+        Text("Card content")
+    )
+)
+
+// Spacer for adding space
+Spacer(size = 16)  // Size in dp
+----
+
+=== Running Applications
+
+To run an iced-kt application with Jetpack Compose, use the `runIced()` extension function:
+
+[source,kotlin]
+----
+import androidx.compose.ui.window.Window
+import androidx.compose.ui.window.application
+import xyz.malefic.compose.iced.*
+
+fun main() = application {
+    Window(onCloseRequest = ::exitApplication, title = "My App") {
+        MyApp().runIced()
+    }
+}
 ----
 
 == License

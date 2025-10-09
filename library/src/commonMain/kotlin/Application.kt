@@ -32,7 +32,11 @@ interface Application<Model, Message> {
      * This function returns a tree of Elements that describe the UI.
      *
      * @param model The current state to render
+     * @param dispatch Function to dispatch messages for state updates
      * @return A description of the view as an Element tree
      */
-    fun view(model: Model): Element
+    fun view(
+        model: Model,
+        dispatch: (Message) -> Unit,
+    ): Element
 }

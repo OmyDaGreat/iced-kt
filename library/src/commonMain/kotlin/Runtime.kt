@@ -47,7 +47,7 @@ class IcedRuntime<Model, Message>(
         }
 
         MaterialTheme {
-            renderElement(application.view(model), dispatch)
+            renderElement(application.view(model, dispatch), dispatch)
         }
     }
 

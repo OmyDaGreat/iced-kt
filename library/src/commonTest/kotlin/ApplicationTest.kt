@@ -29,17 +29,22 @@ class ApplicationTest {
                 is CounterMessage.Decrement -> model.copy(value = model.value - 1)
             }
 
-        override fun view(model: Counter): Element {
-            val dispatch: (CounterMessage) -> Unit = { msg ->
+        override fun view(
+            model: Counter,
+            dispatch: (CounterMessage) -> Unit,
+        ): Element {
+            // For testing, capture the dispatched message
+            val testDispatch: (CounterMessage) -> Unit = { msg ->
                 lastDispatchedMessage = msg
+                dispatch(msg)
             }
 
             return Column(
                 children =
                     listOf(
                         Text("Count: ${model.value}"),
-                        Button("Increment", onClick = { dispatch(CounterMessage.Increment) }),
-                        Button("Decrement", onClick = { dispatch(CounterMessage.Decrement) }),
+                        Button("Increment", onClick = { testDispatch(CounterMessage.Increment) }),
+                        Button("Decrement", onClick = { testDispatch(CounterMessage.Decrement) }),
                     ),
             )
         }
@@ -72,7 +77,7 @@ class ApplicationTest {
     fun `test view generation`() {
         val app = CounterApp()
         val model = Counter(value = 42)
-        val view = app.view(model)
+        val view = app.view(model) {}
         assertEquals(3, (view as Column).children.size)
     }
 
@@ -80,7 +85,7 @@ class ApplicationTest {
     fun `test button click dispatches message`() {
         val app = CounterApp()
         val model = Counter(value = 0)
-        val view = app.view(model) as Column
+        val view = app.view(model) {} as Column
         val incrementButton = view.children[1] as Button
 
         // Simulate button click

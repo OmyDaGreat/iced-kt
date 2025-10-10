@@ -1,3 +1,5 @@
+@file:Suppress("ComposableNaming")
+
 package xyz.malefic.compose.iced
 
 import androidx.compose.foundation.layout.Arrangement
@@ -57,10 +59,9 @@ class IcedRuntime<Model, Message>(
         dispatch: (Message) -> Unit,
     ) {
         when (element) {
-            is xyz.malefic.compose.iced.Text -> {
-                Text(text = element.content)
-            }
-            is xyz.malefic.compose.iced.Column -> {
+            is Text -> Text(text = element.content)
+
+            is Column ->
                 Column(
                     modifier = Modifier.padding(8.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -69,8 +70,8 @@ class IcedRuntime<Model, Message>(
                         renderElement(child, dispatch)
                     }
                 }
-            }
-            is xyz.malefic.compose.iced.Row -> {
+
+            is Row ->
                 Row(
                     modifier = Modifier.padding(8.dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -80,13 +81,13 @@ class IcedRuntime<Model, Message>(
                         renderElement(child, dispatch)
                     }
                 }
-            }
-            is xyz.malefic.compose.iced.Button -> {
+
+            is Button ->
                 Button(onClick = element.onClick) {
                     Text(element.label)
                 }
-            }
-            is xyz.malefic.compose.iced.TextField -> {
+
+            is TextField ->
                 OutlinedTextField(
                     value = element.value,
                     onValueChange = element.onValueChange,
@@ -98,8 +99,8 @@ class IcedRuntime<Model, Message>(
                         },
                     modifier = Modifier.fillMaxWidth(),
                 )
-            }
-            is xyz.malefic.compose.iced.Checkbox -> {
+
+            is Checkbox ->
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -112,11 +113,10 @@ class IcedRuntime<Model, Message>(
                         Text(text = label)
                     }
                 }
-            }
-            is xyz.malefic.compose.iced.Spacer -> {
-                Spacer(modifier = Modifier.height(element.size.dp).width(element.size.dp))
-            }
-            is xyz.malefic.compose.iced.Switch -> {
+
+            is Spacer -> Spacer(modifier = Modifier.height(element.size.dp).width(element.size.dp))
+
+            is Switch ->
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -129,8 +129,8 @@ class IcedRuntime<Model, Message>(
                         onCheckedChange = element.onCheckedChange,
                     )
                 }
-            }
-            is xyz.malefic.compose.iced.Card -> {
+
+            is Card ->
                 Card(
                     modifier = Modifier.padding(8.dp),
                 ) {
@@ -143,17 +143,36 @@ class IcedRuntime<Model, Message>(
                         }
                     }
                 }
-            }
         }
     }
 }
 
 /**
- * Extension function to create and run an Iced application.
+ * Creates and runs an Iced application inside a Jetpack Compose context.
  *
- * @return A Composable function that runs the application
+ * This extension constructs an [IcedRuntime] for the receiving [Application]
+ * and immediately invokes its composable `run` function. Use this to render
+ * an Iced-style Elm architecture app with Compose, wiring the application's
+ * `init`, `update`, and `view` implementations into the Compose runtime.
+ *
+ * @receiver The [Application] instance to run.
+ * @typeParam Model The application's state type.
+ * @typeParam Message The type of messages that can update the state.
  */
 @Composable
 fun <Model, Message> Application<Model, Message>.runIced() {
     IcedRuntime(this).run()
 }
+
+/**
+ * Convenience operator function that runs this [Application] as a Composable.
+ *
+ * This delegates to [runIced] so the application can be invoked with
+ * `myApplication()` where `myApplication` is an `Application<Model, Message>`.
+ *
+ * @param Model The application's state type.
+ * @param Message The type of messages that can update the state.
+ * @receiver The [Application] instance to run.
+ */
+@Composable
+operator fun <Model, Message> Application<Model, Message>.invoke() = runIced()

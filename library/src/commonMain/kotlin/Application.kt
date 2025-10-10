@@ -29,11 +29,14 @@ interface Application<Model, Message> {
 
     /**
      * Describes how the current model should be rendered.
-     * This function will be platform-specific and typically returns
-     * a composable description of the UI.
+     * This function returns a tree of Elements that describe the UI.
      *
      * @param model The current state to render
-     * @return A description of the view (platform-specific)
+     * @param dispatch Function to dispatch messages for state updates
+     * @return A description of the view as an Element tree
      */
-    fun view(model: Model): Any
+    fun view(
+        model: Model,
+        dispatch: (Message) -> Unit,
+    ): Element
 }

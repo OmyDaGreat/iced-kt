@@ -1,7 +1,7 @@
 $dokka.format:html-v1
 $dokka.linkExtension:html
 $dokka.location:xyz.malefic.compose.iced////PointingToDeclaration/library/xyz.malefic.compose.iced/index.html
-$dokka.location:xyz.malefic.compose.iced//batch/#kotlin.Array[xyz.malefic.compose.iced.Command[TypeParam(bounds=[kotlin.Any?])]]/PointingToDeclaration/library/xyz.malefic.compose.iced/batch.html
+$dokka.location:xyz.malefic.compose.iced//batch/#xyz.malefic.compose.iced.Command[TypeParam(bounds=[kotlin.Any?])]/PointingToDeclaration/library/xyz.malefic.compose.iced/batch.html
 $dokka.location:xyz.malefic.compose.iced//invoke/xyz.malefic.compose.iced.Application[TypeParam(bounds=[kotlin.Any?]),TypeParam(bounds=[kotlin.Any?])]#/PointingToDeclaration/library/xyz.malefic.compose.iced/invoke.html
 $dokka.location:xyz.malefic.compose.iced//runIced/xyz.malefic.compose.iced.Application[TypeParam(bounds=[kotlin.Any?]),TypeParam(bounds=[kotlin.Any?])]#/PointingToDeclaration/library/xyz.malefic.compose.iced/run-iced.html
 $dokka.location:xyz.malefic.compose.iced/Application///PointingToDeclaration/library/xyz.malefic.compose.iced/-application/index.html
